@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dati dal Server</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        #result {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-item {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        #error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dati dal Server</h1>
+    <button onclick="fetchData()">Aggiorna Dati</button>
+    <div id="result">
+        <p>Clicca il pulsante per caricare i dati.</p>
+    </div>
+
+    <script>
+        function fetchData() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Caricamento...</p>';
+
+            fetch('https://dynamic-freedom-production.up.railway.app')
+                .then(response => response.json())
+                .then(data => {
+                    resultDiv.innerHTML = `
+                        <div class="data-item"><span class="label">Messaggio:</span> ${data.message}</div>
+                        <div class="data-item"><span class="label">Timestamp:</span> ${new Date(data.timestamp).toLocaleString()}</div>
+                        <div class="data-item"><span class="label">Versione:</span> ${data.version}</div>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `<p id="error">Errore durante il recupero dei dati: ${error.message}</p>`;
+                });
+        }
+    </script>
+</body>
+
+</html>
